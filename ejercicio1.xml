@@ -94,24 +94,55 @@ return
   </resultado>
 11. Mostrar el título del libro, su precio y su precio con el IVA incluido, cada uno con su propia etiqueta. Ordénalos por precio con IVA.
 
+  for $book in /bookstore/book
+  let $price := $book/price * 0.04
+  return
+   <titulo>{$book/title/text()}</titulo>|<precio>{$book/price/text()}</precio>|<precio_iva>{$book/price * 0.04}</precio_iva>
+
+
 12. Mostrar la suma total de los precios de los libros con la etiqueta "total".
+
+let $total := sum(/bookstore/book/price)
+return <total>{ $total }</total>
 
 13. Mostrar cada uno de los precios de los libros, y al final una nueva etiqueta con la suma de los precios.
 
+let $books := /bookstore/book
+for $book in $books
+return <precio>{ $book/price/text() }</precio>|<total>{ sum($books/price) }</total>
+
 14. Mostrar el título y el número de autores que tiene cada título en etiquetas diferentes.
+
+for $book in bookstore/book
+  return <titulo>{ $book/title/text() }</titulo>|<num_autor>{ count($book/author) }</num_autor>
 
 15. Mostrar en la misma etiqueta el título y entre paréntesis el número de autores que tiene ese título.
 
 16. Mostrar los libros escritos en años que terminen en "3".
 
+for $book in bookstore/book
+where ends-with($book/year, '3')
+return $book
+
 17. Mostrar los libros cuya categoría empiece por "C".
+
+for $book in /bookstore/book
+where starts-with($book/@category,'C')
+return $book
 
 18. Mostrar los libros que tengan una "X" mayúscula o minúscula en el título.
 
 19. Mostrar el título y el número de caracteres que tiene cada título, cada uno con su propia etiqueta.
+
+for $book in /bookstore/book/title/text()
+return <titulo>{$book}</titulo>|<num_caracteres>{string-length($book)}</num_caracteres>
 
 20. Mostrar todos los años en los que se ha publicado un libro eliminando los repetidos. Etiquétalos con "año".
 
 21. Mostrar todos los autores eliminando los que se repiten y ordenados por el número de caracteres que tiene cada autor.
 
 22. Mostrar los títulos en una tabla de HTML.
+
+  for $book in /bookstore/book
+  return <tr><td>{ $book/title }</td></tr>
+
